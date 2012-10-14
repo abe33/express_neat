@@ -3,9 +3,11 @@ bind = (fn, context) -> -> fn.apply context, arguments
 
 class Controller
   @partialName: -> @name.replace('Controller','').toLowerCase()
+  @crud: ['index', 'show', 'edit', 'update', 'create', 'destroy', 'new']
 
   constructor: ->
-    @index = @wrap @index
+    for key in Controller.crud
+      @[key] = @wrap @[key]
 
   wrap: (method) ->
     method = bind method, this

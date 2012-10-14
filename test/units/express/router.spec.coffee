@@ -1,5 +1,5 @@
 require '../../test_helper'
-require './router_helper'
+require '../../helpers/express/router_helper'
 
 withRouter ->
 
