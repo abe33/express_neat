@@ -6,7 +6,7 @@ express = require 'express'
 {aliases, describe, environment, usages} = Neat.require 'utils/commands'
 _ = Neat.i18n.getHelper()
 
-Express = require '../'
+Express = require '..'
 
 lockPath = "#{Neat.root}/.serverlock"
 lock = -> fs.writeFileSync lockPath
