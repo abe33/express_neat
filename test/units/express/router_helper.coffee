@@ -82,7 +82,7 @@ global.expectRoute = (method, route) ->
   toHaveRegistered: (controller) ->
     describe "with the path #{method.toUpperCase()} #{route}", ->
       it "should have registered the controller #{controller}", ->
-        data = @router.routes_[method][route]
+        data = @router.routesMap[method][route]
         expect("#{data.controller}##{data.action}").toBe(controller)
 
   not:

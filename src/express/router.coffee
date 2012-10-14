@@ -5,7 +5,7 @@ _ = Neat.i18n.getHelper()
 
 class Router
   constructor: (@app, @controllers={}) ->
-    @routes_ =
+    @routesMap =
       get: {}
       put: {}
       post: {}
@@ -71,8 +71,8 @@ class Router
                {method, path, options}
         throw new Error m
 
-    @routes_[method][path] = data
-    @app[method] path, (req, res)=>
+    @routesMap[method][path] = data
+    @app?[method] path, (req, res)=>
       if typeof data.controller is 'function'
         data.controller(req, res)
       else
@@ -80,10 +80,10 @@ class Router
         controller = new controllerClass
         controller[data.action](req, res)
 
-  hasRoute: (method, path) -> @routes_[method][path]?
+  hasRoute: (method, path) -> @routesMap[method][path]?
 
   matchRoute: (method, path) ->
-    for k,v of @routes_[method]
+    for k,v of @routesMap[method]
       res = @matchPath k, path
       return res if res?
     undefined
