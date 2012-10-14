@@ -1,0 +1,20 @@
+en:
+  neat:
+    express:
+      servr_started: "Server started on port #{port}"
+
+      errors:
+        server_running: The server is allready running
+        server_terminated: "server terminated by #{signal}"
+
+      controllers:
+        errors:
+          invalid_controller: |
+            Invalid controller registered for #{method} #{path}
+          missing_action: |
+            Missing action #{action} on controller #{controller}
+          missing_controller: |
+            Missing controller #{controller}
+            #{paths}
+          broken_controller: |
+            Broken controller #{controller}
