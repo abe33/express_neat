@@ -12,5 +12,6 @@ Express =
     router = new Router app
     routes = require "#{Neat.root}/lib/config/routes"
     router.routes routes
+    router
 
 module.exports = Express
