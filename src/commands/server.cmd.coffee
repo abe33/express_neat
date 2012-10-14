@@ -6,8 +6,7 @@ express = require 'express'
 {aliases, describe, environment, usages} = Neat.require 'utils/commands'
 _ = Neat.i18n.getHelper()
 
-Router = require '../express/router'
-
+Express = require '../'
 
 lockPath = "#{Neat.root}/.serverlock"
 lock = -> fs.writeFileSync lockPath
@@ -28,10 +27,9 @@ server = (pr) ->
   aliases 'server', 's',
   describe 'Runs a server using express.js',
   cmd = (args..., callback) ->
+    console.log "server run"
     return error red _('neat.express.errors.server_running') if locked()
     lock()
-
-    routes = require "#{Neat.root}/lib/config/routes"
 
     {port} = Neat.config.server
     app = express()
@@ -40,11 +38,12 @@ server = (pr) ->
 
     trap 'SIGTERM', 'SIGKILL', 'SIGINT'
     process.on 'uncaughtException', (e) ->
+      console.log e.message.red
+      console.log e.stack
       unlock()
       process.exit 1
 
-    router = new Router app
-    router.routes routes
+    Express.loadRoutes app
 
     app.listen port
     info green _ 'neat.express.server_started', {port}
