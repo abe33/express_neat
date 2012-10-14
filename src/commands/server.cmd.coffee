@@ -8,7 +8,6 @@ _ = Neat.i18n.getHelper()
 
 Router = require '../express/router'
 
-routes = require "#{Neat.root}/lib/config/routes"
 
 lockPath = "#{Neat.root}/.serverlock"
 lock = -> fs.writeFileSync lockPath
@@ -31,6 +30,8 @@ server = (pr) ->
   cmd = (args..., callback) ->
     return error red _('neat.express.errors.server_running') if locked()
     lock()
+
+    routes = require "#{Neat.root}/lib/config/routes"
 
     {port} = Neat.config.server
     app = express()

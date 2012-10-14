@@ -18,3 +18,12 @@ en:
             #{paths}
           broken_controller: |
             Broken controller #{controller}
+
+    commands:
+      generate:
+        express_project:
+          generation_failed: |
+            Express project generation failed:
+            #{message}
+          description: |
+            Generates the default project structure for an express application
