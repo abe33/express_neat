@@ -1,9 +1,10 @@
 
+CRUD = ['index', 'show', 'edit', 'update', 'create', 'destroy', 'new']
 bind = (fn, context) -> -> fn.apply context, arguments
 
 class Controller
   @partialName: -> @name.replace('Controller','').toLowerCase()
-  @crud: ['index', 'show', 'edit', 'update', 'create', 'destroy', 'new']
+  @crud: CRUD
 
   constructor: ->
     for key in Controller.crud
