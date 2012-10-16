@@ -56,8 +56,8 @@ global.request = (options) ->
 
   request.merge options
 
-global.result = (options) ->
-  result =
+global.response = (options) ->
+  response =
     send: ->
 
-  result.merge options
+  response.merge options

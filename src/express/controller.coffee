@@ -37,7 +37,7 @@ class Controller
     bound = bind fn, self
     return (req, res) ->
       self.request = req
-      self.result = res
+      self.response = res
       self.filters.before[method].dispatch method, ->
         if self.filters.before[method].isAsync fn
           bound.call null, req, res, ->
@@ -64,8 +64,8 @@ class Controller
           @filters[signal][view].add @[filter], this
 
   render: (options) ->
-    @result.send options
-
+    @response.send options unless @renderWasCalled
+    @renderWasCalled = true
 
   toString: -> "[object #{@constructor.name}]"
 

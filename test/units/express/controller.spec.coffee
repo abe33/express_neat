@@ -8,7 +8,7 @@ withTestController ->
   it 'should have its crud methods been wrapped', ->
     for key in CRUD
       expect(@controller[key]).not.toBe(@controllerClass::[key])
-      @controller[key](request(), result())
+      @controller[key](request(), response())
       expect(@calls[key].context).toBe(@controller)
 
   describe 'with before and after filters set for the index view', ->
@@ -16,7 +16,7 @@ withTestController ->
       ended = false
       initial_count = @controller.afterCalls
 
-      res = result send: =>
+      res = response send: =>
         expect(@controller.beforeCalls).toBe(1)
         expect(@controller.afterCalls).toBe(0)
 
@@ -35,7 +35,7 @@ withTestController ->
       ended = false
       initial_count = @controller.afterCalls
 
-      res = result send: =>
+      res = response send: =>
         expect(@controller.beforeCalls).toBe(0)
 
         setTimeout =>
