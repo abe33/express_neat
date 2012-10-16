@@ -35,16 +35,19 @@ class Controller
   @wrap: (self, method) ->
     fn = self[method]
     bound = bind fn, self
-    return (req, res) =>
+    return (req, res) ->
       self.request = req
       self.result = res
-      self.filters.before[method].dispatch method, =>
+      self.filters.before[method].dispatch method, ->
         if self.filters.before[method].isAsync fn
-          bound.call null, req, res, =>
-            self.invokeAfterFilters method
+          bound.call null, req, res, ->
+            Controller.invokeAfterFilters self, method
         else
           bound.call null, req, res
-          self.invokeAfterFilters method, req, res
+          Controller.invokeAfterFilters self, method, req, res
+
+  @invokeAfterFilters: (self, method, req, res) ->
+    self.filters.after[method].dispatch req, res, ->
 
   #### Instance Members
   constructor: ->
@@ -63,8 +66,6 @@ class Controller
   render: (options) ->
     @result.send options
 
-  invokeAfterFilters: (method, req, res) ->
-    @filters.after[method].dispatch req, res, ->
 
   toString: -> "[object #{@constructor.name}]"
 
