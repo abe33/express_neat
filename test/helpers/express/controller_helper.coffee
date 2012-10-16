@@ -12,12 +12,52 @@ global.withTestController = (block) ->
           context: this
           arguments: arguments
 
+        @render "#{key} was called"
+
+      genControllerNoRenderMethod = (key) -> ->
+        calls[key] =
+          context: this
+          arguments: arguments
+
       class TestController extends Controller
+        @after 'afterFilter', only: 'index'
+        @before 'beforeFilter', except: ['show', 'update']
+
         for key in CRUD
           TestController::[key] = genControllerMethod key
+
+        edit: genControllerNoRenderMethod 'edit'
+
+        constructor: ->
+          @afterCalls = 0
+          @beforeCalls = 0
+          super()
+
+        afterFilter: -> @afterCalls++
+        beforeFilter: -> @beforeCalls++
 
       @calls = calls
       @controllerClass = TestController
       @controller = new TestController
 
     block.call this
+
+global.request = (options) ->
+  request =
+    params: []
+    body: {}
+    originalMethod: 'GET'
+    route:
+      method: 'get'
+      path: '/'
+      keys: []
+      regexp: /^\/\/?$/i
+      params: []
+
+  request.merge options
+
+global.result = (options) ->
+  result =
+    send: ->
+
+  result.merge options
