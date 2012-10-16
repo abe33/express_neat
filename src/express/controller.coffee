@@ -48,6 +48,7 @@ class Controller
 
   @invokeAfterFilters: (self, method, req, res) ->
     self.filters.after[method].dispatch req, res, ->
+      unless self.renderWasCalled then self.response.send ''
 
   #### Instance Members
   constructor: ->

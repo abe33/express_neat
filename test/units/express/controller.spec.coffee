@@ -48,3 +48,26 @@ withTestController ->
 
       waitsFor progress(-> ended), 'Timed out in controller show', 1000
 
+  describe 'when one of its views is invoked', ->
+    describe 'and that view calls render', ->
+      it 'should send the response passed to render', ->
+        ended = false
+
+        runs ->
+          @controller.show request(), response send: (response) ->
+            expect(response).toBe('show was called')
+            ended = true
+
+        waitsFor progress(-> ended), 'Timed out in controller show', 1000
+
+
+    describe 'and that view does not calls render', ->
+      it 'should send an empty response', ->
+        ended = false
+
+        runs ->
+          @controller.edit request(), response send: (response) ->
+            expect(response).toBe('')
+            ended = true
+
+        waitsFor progress(-> ended), 'Timed out in controller edit', 1000
