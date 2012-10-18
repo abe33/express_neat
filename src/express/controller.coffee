@@ -35,18 +35,13 @@ class Controller
 
   @wrap: (self, method) ->
     fn = self[method]
-    bound = bind fn, self
     return (req, res) ->
       self.request = req
       self.response = res
       self.currentView = method
       self.filters.before[method].dispatch method, ->
-        if self.filters.before[method].isAsync fn
-          bound.call null, req, res, ->
-            Controller.invokeAfterFilters self, method
-        else
-          bound.call null, req, res
-          Controller.invokeAfterFilters self, method, req, res
+        fn.callAsync self, req, res, ->
+          Controller.invokeAfterFilters self, method
 
   @invokeAfterFilters: (self, method, req, res) ->
     self.filters.after[method].dispatch req, res, ->
