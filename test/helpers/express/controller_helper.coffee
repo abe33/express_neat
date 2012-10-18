@@ -80,3 +80,18 @@ global.response = (options) ->
     send: ->
 
   response.merge options
+global.expectView = (method, req, res) ->
+  req = request() unless req?
+  res = response() unless res?
+
+  toRespond: (status=200, body) ->
+    it "should respond with status #{status}", ->
+      ended = false
+
+      runs ->
+        @controller[method] req, res.merge send: (s, r) ->
+          expect(s).toBe(status)
+          expect(r).toBe(body) if body?
+          ended = true
+
+      waitsFor progress(-> ended), "Timed out in controller #{method}", 1000
