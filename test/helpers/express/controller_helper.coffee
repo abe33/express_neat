@@ -1,32 +1,51 @@
-
+Neat = require 'neat'
 Controller = require '../../../lib/express/controller'
+
+hamlcInit = Neat.require 'config/initializers/templates/haml_coffee'
 
 global.CRUD = ['index', 'show', 'edit', 'update', 'create', 'destroy', 'new']
 
 global.withTestController = (block) ->
   describe 'A class TestController that extends Controller', ->
     beforeEach ->
+
+      Neat.config =
+        templatesDirectoryName: 'test/fixtures/templates'
+        engines:
+          templates: 
+            hamlc: null
+
+      hamlcInit Neat.config
+
       calls = {}
-      genControllerMethod = (key) -> ->
+      genViewMethod = (key) -> ->
         calls[key] =
           context: this
           arguments: arguments
 
         @render "#{key} was called"
 
-      genControllerNoRenderMethod = (key) -> ->
+      genViewNoRenderMethod = (key) -> ->
         calls[key] =
           context: this
           arguments: arguments
 
+      # genViewRenderWithObjectMethod = (key) -> ->
+      #   calls[key] =
+      #     context: this
+      #     arguments: arguments
+      #   @key = key
+      #   @render hamlc: ''
+
       class TestController extends Controller
         @after 'afterFilter', only: 'index'
-        @before 'beforeFilter', except: ['show', 'update']
+        @before 'beforeFilter', except: ['show', 'update', 'edit', 'delete']
 
         for key in CRUD
-          TestController::[key] = genControllerMethod key
+          TestController::[key] = genViewMethod key
 
-        edit: genControllerNoRenderMethod 'edit'
+        edit: genViewNoRenderMethod 'edit'
+        # delete: genViewRenderWithObjectMethod 'delete'
 
         constructor: ->
           @afterCalls = 0

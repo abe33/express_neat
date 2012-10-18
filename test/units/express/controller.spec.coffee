@@ -5,7 +5,7 @@ withTestController ->
   it 'should be able to return its partial name', ->
     expect(@controllerClass.partialName()).toBe('test')
 
-  it 'should have its crud methods been wrapped', ->
+  it 'should have its views wrapped', ->
     for key in CRUD
       expect(@controller[key]).not.toBe(@controllerClass::[key])
       @controller[key](request(), response())
@@ -49,7 +49,7 @@ withTestController ->
       waitsFor progress(-> ended), 'Timed out in controller show', 1000
 
   describe 'when one of its views is invoked', ->
-    describe 'and that view calls render', ->
+    describe 'and that view calls render with a string', ->
       it 'should send the response passed to render', ->
         ended = false
 
@@ -60,14 +60,13 @@ withTestController ->
 
         waitsFor progress(-> ended), 'Timed out in controller show', 1000
 
-
     describe 'and that view does not calls render', ->
-      it 'should send an empty response', ->
+      it 'should send the result of the template of the corresponding view', ->
         ended = false
 
         runs ->
           @controller.edit request(), response send: (response) ->
-            expect(response).toBe('')
+            expect(response).toBe('edit template was called')
             ended = true
 
         waitsFor progress(-> ended), 'Timed out in controller edit', 1000
