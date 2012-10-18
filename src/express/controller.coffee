@@ -68,13 +68,13 @@ class Controller
       path = resolve @directory, @constructor.partialName(), @currentView
       render path, this, (err, response) =>
         throw err if err?
-        @sendResponse response
+        @sendResponse 200, response
 
     else if typeof options is 'string'
-      @sendResponse options
+      @sendResponse 200, options
 
-  sendResponse: (response) ->
-    @response.send response unless @renderWasCalled
+  sendResponse: (status, response) ->
+    @response.send status, response unless @renderWasCalled
     @renderWasCalled = true
 
   toString: -> "[object #{@constructor.name}]"

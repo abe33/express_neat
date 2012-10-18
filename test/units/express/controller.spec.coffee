@@ -50,23 +50,8 @@ withTestController ->
 
   describe 'when one of its views is invoked', ->
     describe 'and that view calls render with a string', ->
-      it 'should send the response passed to render', ->
-        ended = false
-
-        runs ->
-          @controller.show request(), response send: (response) ->
-            expect(response).toBe('show was called')
-            ended = true
-
-        waitsFor progress(-> ended), 'Timed out in controller show', 1000
+      expectView('index').toRespond(200, 'index was called')
 
     describe 'and that view does not calls render', ->
-      it 'should send the result of the template of the corresponding view', ->
-        ended = false
+      expectView('edit').toRespond(200, 'edit template was called')
 
-        runs ->
-          @controller.edit request(), response send: (response) ->
-            expect(response).toBe('edit template was called')
-            ended = true
-
-        waitsFor progress(-> ended), 'Timed out in controller edit', 1000
