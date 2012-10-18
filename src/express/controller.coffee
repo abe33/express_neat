@@ -67,11 +67,13 @@ class Controller
       name = @constructor.partialName()
       path = resolve @directory, @constructor.partialName(), @currentView
       render path, this, (err, response) =>
-        throw err if err?
+        return @trapError err if err?
         @sendResponse 200, response
 
     else if typeof options is 'string'
       @sendResponse 200, options
+
+  trapError: (error) -> @sendResponse 500, 'Error 500'
 
   sendResponse: (status, response) ->
     @response.send status, response unless @renderWasCalled

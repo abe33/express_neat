@@ -55,3 +55,5 @@ withTestController ->
     describe 'and that view does not calls render', ->
       expectView('edit').toRespond(200, 'edit template was called')
 
+    describe 'and that views does not have a template', ->
+      expectView('update').toRespond(500, 'Error 500')

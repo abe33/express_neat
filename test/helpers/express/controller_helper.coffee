@@ -45,6 +45,7 @@ global.withTestController = (block) ->
           TestController::[key] = genViewMethod key
 
         edit: genViewNoRenderMethod 'edit'
+        update: genViewNoRenderMethod 'update'
         # delete: genViewRenderWithObjectMethod 'delete'
 
         constructor: ->
