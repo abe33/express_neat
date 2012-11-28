@@ -9,11 +9,16 @@
   "engine": {
     "node": "~0.8.0"
   },
+  "scripts": {
+    "test": "jasmine-node --coffee test/units"
+  },
   "dependencies": {
     "neat": "0.0.72",
     "express": "*",
     "supervisor": "*"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "jasmine-node": "git://github.com/abe33/jasmine-node.git#patch-1"
+  },
   "main": "./lib/index"
 }
