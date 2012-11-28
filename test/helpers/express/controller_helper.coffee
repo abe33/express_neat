@@ -6,7 +6,7 @@ hamlcInit = Neat.require 'config/initializers/templates/haml_coffee'
 global.CRUD = ['index', 'show', 'edit', 'update', 'create', 'destroy', 'new']
 
 global.withTestController = (block) ->
-  describe 'A class TestController that extends Controller', ->
+  describe 'A TestController that extends Controller', ->
     beforeEach ->
 
       Neat.config =
@@ -30,23 +30,23 @@ global.withTestController = (block) ->
           context: this
           arguments: arguments
 
-      # genViewRenderWithObjectMethod = (key) -> ->
-      #   calls[key] =
-      #     context: this
-      #     arguments: arguments
-      #   @key = key
-      #   @render hamlc: ''
+      genViewRenderWithObjectMethod = (key) -> ->
+        calls[key] =
+          context: this
+          arguments: arguments
+        @key = key
+        @render hamlc: "sub/#{key}", status: 300
 
       class TestController extends Controller
         @after 'afterFilter', only: 'index'
-        @before 'beforeFilter', except: ['show', 'update', 'edit', 'delete']
+        @before 'beforeFilter', except: ['show', 'update', 'edit', 'new']
 
         for key in CRUD
           TestController::[key] = genViewMethod key
 
         edit: genViewNoRenderMethod 'edit'
         update: genViewNoRenderMethod 'update'
-        # delete: genViewRenderWithObjectMethod 'delete'
+        new: genViewRenderWithObjectMethod 'new'
 
         constructor: ->
           @afterCalls = 0
@@ -81,6 +81,7 @@ global.response = (options) ->
     send: ->
 
   response.merge options
+
 global.expectView = (method, req, res) ->
   req = request() unless req?
   res = response() unless res?
@@ -96,3 +97,4 @@ global.expectView = (method, req, res) ->
           ended = true
 
       waitsFor progress(-> ended), "Timed out in controller #{method}", 1000
+

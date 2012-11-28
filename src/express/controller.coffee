@@ -63,21 +63,35 @@ class Controller
           @filters[signal][view].add @[filter], this
 
   render: (options) ->
-    unless options?
-      name = @constructor.partialName()
-      path = resolve @directory, @constructor.partialName(), @currentView
-      render path, this, (err, response) =>
-        return @trapError err if err?
-        @sendResponse 200, response
-
-    else if typeof options is 'string'
-      @sendResponse 200, options
-
-  trapError: (error) -> @sendResponse 500, 'Error 500'
-
-  sendResponse: (status, response) ->
-    @response.send status, response unless @renderWasCalled
+    status = null
+    path = null
+    name = @constructor.partialName()
     @renderWasCalled = true
+
+    switch typeof options
+      when 'string' then return @send 200, options
+      when 'object'
+        status = options.status || 200
+        engine = @findEngineFor options
+        return @trapError new Error "no engine found" unless engine?
+        path = resolve @directory, name, "#{options[engine]}.#{engine}"
+      else
+        status = 200
+        path = resolve @directory, name, @currentView
+
+    render path, this, (err, response) =>
+      return @trapError err if err?
+      @send status, response
+
+  trapError: (error) ->
+    @send 500, 'Error 500'
+
+  send: (status, response) ->
+    @response.send status, response unless @renderWasCalled and @sendWasCalled
+    @sendWasCalled = true
+
+  findEngineFor: (opts) ->
+    return k for k,v of opts when Neat.config.engines.templates[k]?
 
   toString: -> "[object #{@constructor.name}]"
 

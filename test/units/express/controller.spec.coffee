@@ -52,6 +52,9 @@ withTestController ->
     describe 'and that view calls render with a string', ->
       expectView('index').toRespond(200, 'index was called')
 
+    describe 'and that view calls render with an object', ->
+      expectView('new').toRespond(300, '')
+
     describe 'and that view does not calls render', ->
       expectView('edit').toRespond(200, 'edit template was called')
 
