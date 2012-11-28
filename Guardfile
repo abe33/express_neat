@@ -3,4 +3,7 @@
 
 guard 'livereload' do
   watch('.serverlock')
+  watch(%r{assets/.+})
+  watch(%r{templates/.+})
+  watch(%r{config/locales/.+\.yml})
 end
