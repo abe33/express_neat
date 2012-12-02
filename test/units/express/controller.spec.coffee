@@ -53,7 +53,14 @@ withTestController ->
       expectView('index').toRespond(200, 'index was called')
 
     describe 'and that view calls render with an object', ->
-      expectView('new').toRespond(300, '')
+      describe 'that point to an engine and a template that exists', ->
+        expectView('new').toRespond(300, '')
+
+      describe 'that point to an engine that does not exists', ->
+        expectView('destroy').toRespond(500, 'Error 500')
+
+      describe 'that point to a template that does not exists', ->
+        expectView('show').toRespond(500, 'Error 500')
 
     describe 'and that view does not calls render', ->
       expectView('edit').toRespond(200, 'edit template was called')

@@ -30,12 +30,15 @@ global.withTestController = (block) ->
           context: this
           arguments: arguments
 
-      genViewRenderWithObjectMethod = (key) -> ->
+      genViewRenderWithObjectMethod = (key, params) -> ->
         calls[key] =
           context: this
           arguments: arguments
         @key = key
-        @render hamlc: "sub/#{key}", status: 300
+        options = {}
+        options[params.template] = params.path
+        options.status = params.status
+        @render options
 
       class TestController extends Controller
         @after 'afterFilter', only: 'index'
@@ -46,7 +49,22 @@ global.withTestController = (block) ->
 
         edit: genViewNoRenderMethod 'edit'
         update: genViewNoRenderMethod 'update'
-        new: genViewRenderWithObjectMethod 'new'
+        new: genViewRenderWithObjectMethod('new', {
+          template: 'hamlc'
+          path: 'sub/new'
+          status: 300
+        })
+        destroy: genViewRenderWithObjectMethod('destroy', {
+          template: 'foo'
+          path: 'foo'
+          status: 300
+        })
+        show: genViewRenderWithObjectMethod('show', {
+          template: 'hamlc'
+          path: 'foo'
+          status: 300
+        })
+
 
         constructor: ->
           @afterCalls = 0
