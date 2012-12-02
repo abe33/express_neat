@@ -10,10 +10,10 @@
     "node": "~0.8.0"
   },
   "scripts": {
-    "test": "jasmine-node --coffee test/units"
+    "test": "jasmine-node --coffee test"
   },
   "dependencies": {
-    "neat": "0.0.72",
+    "neat": "0.0.73",
     "express": "*",
     "supervisor": "*"
   },

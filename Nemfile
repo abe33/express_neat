@@ -1,4 +1,4 @@
-npm 'neat', '0.0.72'
+npm 'neat', '0.0.73'
 npm 'express'
 npm 'supervisor'
 
